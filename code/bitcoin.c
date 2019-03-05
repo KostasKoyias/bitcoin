@@ -18,10 +18,9 @@ int main(int argc, char *argv[]){
     uint16_t bucketSize = 0, bitCoinValue = 0, coinID;
     uint8_t sendBuckets = 0, recvBuckets = 0, i, bucketCapacity;
     FILE *transFile = NULL, *balancesFile = NULL;
-    char *line, *buffer, userID[MAX_ID], command[MAX_COMMAND], args[LINE], str, delim[] = ";", file[LINE], ch, *start;
-    struct Transaction transaction;
+    char userID[MAX_ID], command[MAX_COMMAND], args[LINE], file[LINE];
     struct HashTable sendHT, recvHT;
-    struct Wallet *wallet, *sendWallet, *recvWallet;
+    struct Wallet *wallet;
     struct Coin *coinPtr;
     struct Node *nodePtr;
     struct G_list coinlist = {NULL, sizeof(struct Coin), 0, coinCompare, coinAssign, coinPrint, coinFree, NULL}, 

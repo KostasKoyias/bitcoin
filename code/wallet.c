@@ -18,6 +18,9 @@ int walletAssign(void *wallet, const void* userID){
     strcpy(wall->userID, (char*)userID);
     wall->balance = 0;
 
+    if(wallet == NULL || userID == NULL)
+        return -1;
+
     // initialize transactions list
     wall->send_list = wall->recv_list = (struct G_list){.head = NULL, .type_size = sizeof(struct Transaction*), .length = 0,\
     .comp = NULL, .assign = transPtrAssign, .print = transPtrPrint, .free_data = NULL, .value = NULL};
@@ -25,6 +28,8 @@ int walletAssign(void *wallet, const void* userID){
     // initialize the tree_node_pointers list
     wall->quota_list = (struct G_list){.head = NULL, .type_size = sizeof(struct Node*), .length = 0, .comp = NULL,\
     .assign = nodePtrAssign, .print = NULL, .free_data = NULL, .value = NULL};
+
+    return 0;
 }
 
 /* free a heap-allocated wallet*/

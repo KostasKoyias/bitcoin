@@ -39,6 +39,7 @@ int blockAssign(void *blockVoid, const void* blockB_Void){
     // insert a record(wallet pointer) in the first empty position(index 0)
     block->wallets[0] = *(blockB->wallets);
     block->empty = 1;
+    return 0;
 }
 
 /* free all space a block needs, meaning it's wallets vector */
@@ -61,7 +62,7 @@ int blockPrint(void* blockPtr){
 
 /* initialize an empty hash table of wallet pointers*/
 int htInit(struct HashTable* table, char *name, const uint8_t buckets, const int blockCapacity, int (*hashFunction)(const char*, const int)){
-    uint8_t i, j;
+    uint8_t i;
 
     table->name = strdup(name);
     table->hashFunction = hashFunction;
@@ -84,6 +85,8 @@ int htInit(struct HashTable* table, char *name, const uint8_t buckets, const int
 /* free up all space needed for a bucket(main plus overflow blocks)*/
 int htFree(struct HashTable* table){
     uint8_t b;
+    if(table == NULL)
+        return -1;
 
     if(table->name != NULL)
         free(table->name);
@@ -92,6 +95,7 @@ int htFree(struct HashTable* table){
         listFree(&(table->blocks[b]));
     // free all buckets of the hash table
     free(table->blocks);
+    return 0;
 }
 
 /* insert a user(sender or receiver) in the hash table using a UniversalHashing function on his userID*/ 
@@ -139,9 +143,10 @@ void htPrint(const struct HashTable* table){
 /* search for a wallet in the hash table*/
 struct Wallet* htSearch(struct HashTable* table, const char* userID){
     uint8_t bucket;
-    struct Block* block;
     struct Wallet** walletPtrPtr;
-    int i;
+
+    if(table == NULL || userID == NULL)
+        return NULL;
 
     // get the bucket, where this user's wallet might be in
     bucket = UniversalHashing(userID, table->buckets);

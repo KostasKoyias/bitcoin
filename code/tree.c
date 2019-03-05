@@ -25,13 +25,11 @@ struct Node* searchTree(struct Node* root, const char* userID){
 /* split(not always) a node into two(sometimes just one) other(s), return the number of nodes generated*/
 int splitNode(struct Node* node, struct Transaction** transactionPtr){
     struct Transaction* transaction = *transactionPtr;
-    int rem;
 
     if(node == NULL || transaction == NULL)
         return 0;
 
     node->trans = transaction;
-    rem = MAX(0, transaction->value - node->value);
     
     // insert transaction, receiver first
     if((node->left = malloc(sizeof(struct Node))) == NULL){
@@ -85,8 +83,11 @@ int freeTree(struct Node* node){
 
 /* assign a node pointer A(*node) to another node pointer B(*other_node), given a pointer to A(node) and a pointer to B(other_node)  */
 int nodePtrAssign(void *node, const void *other_node){
+    if(node == NULL || other_node == NULL)
+        return -1;
     struct Node **ptr = (struct Node**)node, **other_ptr = (struct Node**)other_node;
     *ptr = *other_ptr;
+    return 0;
 }
 
 /* given a node representing a bitcoin's part estimate the number of transactions this part has been involved in*/
