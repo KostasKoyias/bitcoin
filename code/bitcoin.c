@@ -64,8 +64,8 @@ int main(int argc, char *argv[]){
     if((htInit(&sendHT, "Senders", sendBuckets, bucketCapacity, UniversalHashing) == -1) || (htInit(&recvHT, "Receivers", recvBuckets, bucketCapacity, UniversalHashing)))
         goto free;
 
-    fprintf(stdout, "bitcoin: Reading Balances File...\n");
     /* get bit_coin balances from the input file and update the corresponding data structures */
+    fprintf(stdout, "bitcoin: Reading Balances File...\n");
     while(fscanf(balancesFile, "%s", userID) > 0){
         // create a wallet for the new user
         if(listSearch(&walletlist, userID) != NULL){
@@ -97,9 +97,9 @@ int main(int argc, char *argv[]){
     fprintf(stdout, "\t Done.\n");
     if(balancesFile != NULL)
         fclose(balancesFile);
-
-    fprintf(stdout, "bitcoin: Reading Transactions File...\n");   
+  
     /* get all initial transactions and update the corresponding data structures */
+    fprintf(stdout, "bitcoin: Reading Transactions File...\n"); 
     while(fgets(args, LINE, transFile) != NULL){
         // add transaction to the transactions list and then add a pointer to it, in the wallet and the corresponding tree of the coinlist
         if(requestTransaction(args, &translist, &walletlist, &sendHT, &recvHT, 1) == -2){
