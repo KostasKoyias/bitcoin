@@ -114,5 +114,6 @@ int listMap(struct G_list* list, int (*function)(void*)){
     struct G_node *parser;
     for(parser = list->head; parser != NULL; parser = parser->next)
         function(parser->data);
+    return 0;
 }
 

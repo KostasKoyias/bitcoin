@@ -30,6 +30,7 @@ int coinAssign(void* node, const void* coinID){
     
     coin->coinID = *((uint16_t*) coinID);
     coin->root = (struct Node){.userID = "", .value = 0, .trans = NULL, .left = NULL, .right = NULL};
+    return 0;
 }
 
 /* free a coin node*/
@@ -60,7 +61,7 @@ int coinUnspent(const struct Coin* coin){
         else 
             return 0; 
     }
-
+    return -1;
 }
 
 /*  given a coinPtr, estimate the number of transactions it has been involved in*/
@@ -73,8 +74,10 @@ int coinTimesPassed(const struct Coin* coin){
 /*  given a coinID, print: i)it's initial value, ii) it's unpent part(part that still belongs to the initial user and 
     has never been involved into a transaction) and iii) the number of transactions it's been involved in*/
 int coinStatus(const struct Coin* coin){
+    if(coin == NULL)
+        return -1;
     fprintf(stdout, "status of coin %hd\n-------------------\nInitial_Value: %d$\nUnspent_Part: %d$\nInvolved in %d transactions\n",\
     coin->coinID, coin->root.value, coinUnspent(coin), coinTimesPassed(coin));
-
+    return 0;
 }
 

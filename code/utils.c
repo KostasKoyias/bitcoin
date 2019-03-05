@@ -120,7 +120,6 @@ int get_money(struct G_list* transPtrList, time_t start, time_t end){
 int find(const char *stream, struct HashTable* table, uint8_t code){
     uint8_t argc;
     char id[MAX_ID], start_date[DATE_LEN], end_date[DATE_LEN], start_time[TIME_LEN], end_time[TIME_LEN];
-    int sum = 0;
     time_t start, end;
     struct Wallet *wallet;
     argc = sscanf(stream, "%s%s%s%s%s", id, start_date, start_time, end_date, end_time);

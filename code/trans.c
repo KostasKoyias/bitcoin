@@ -9,12 +9,14 @@
 int transPtrAssign(void *node, const void *other_node){
     struct Transaction **ptr = (struct Transaction**)node, **other_ptr = (struct Transaction**)other_node;
     *ptr = *other_ptr;
+    return 0;
 }
 
 /* given a {pointer to a {pointer to a transaction}} print the inner pointer's content(the transaction) nicely*/
 int transPtrPrint(void* transPtrPtr_void){
     struct Transaction *transPtr = *((struct Transaction**)transPtrPtr_void);
     transPrint(transPtr);
+    return 0;
 }
 
 /* free a {pointer to a {pointer to a transaction}}*/
@@ -39,6 +41,7 @@ int transAssign(void *transA, const void *transB){
     struct Transaction *trA = (struct Transaction*)transA, *trB = (struct Transaction*)transB;
     strcpy(trA->transID, trB->transID);       strcpy(trA->senderID, trB->senderID); strcpy(trA->receiverID, trB->receiverID); 
     strcpy(trA->date, trB->date);             strcpy(trA->time, trB->time);         trA->value = trB->value;
+    return 0;
 }
 
 /* print nicely all information of a given transaction */
@@ -178,7 +181,7 @@ int requestTransaction(const char* stream, struct G_list* translist, struct G_li
         free(parser);
 
         // add pointers to the coin_node_tree pointers list, in each wallet, remember that by convention sender gets the right branch and receiver the left
-        if(temp = 2)
+        if(temp == 2)
             listInsert(&(send->quota_list), &(node->right));
         listInsert(&(recv->quota_list), &(node->left));
     }
