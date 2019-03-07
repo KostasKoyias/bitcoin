@@ -12,13 +12,14 @@
 #include "list.h"
 #include "utils.h"
 #include "trans.h"
+#include <strings.h>
 
 int main(int argc, char *argv[]){
     /* declare variables */
     uint16_t bucketSize = 0, bitCoinValue = 0, coinID;
-    uint8_t sendBuckets = 0, recvBuckets = 0, i, bucketCapacity;
+    uint8_t sendBuckets = 0, recvBuckets = 0, i, bucketCapacity, disp;
     FILE *transFile = NULL, *balancesFile = NULL;
-    char userID[MAX_ID], command[MAX_COMMAND], args[LINE], file[LINE];
+    char userID[MAX_ID], command[MAX_COMMAND], args[LINE], file[MAX_ID], ch;
     struct HashTable sendHT, recvHT;
     struct Wallet *wallet;
     struct Coin *coinPtr;
@@ -101,7 +102,7 @@ int main(int argc, char *argv[]){
     fprintf(stdout, "bitcoin: Reading Transactions File...\n"); 
     while(fgets(args, LINE, transFile) != NULL){
         // add transaction to the transactions list and then add a pointer to it, in the wallet and the corresponding tree of the coinlist
-        if(requestTransaction(args, &translist, &walletlist, &sendHT, &recvHT, 1) == -2){
+        if(requestTransaction(args, &translist, &walletlist, &sendHT, &recvHT, 1, 0) == -2){
             fprintf(stdout, "bitcoin: abort...\n");
             fclose(transFile);
             goto free;
@@ -124,73 +125,92 @@ int main(int argc, char *argv[]){
 
         // get command from cmd
         fscanf(stdin, "%s", command);
-        fgets(args, LINE, stdin);
-
-        // a single transaction was requested
-        if(strcmp(command, "requestTransaction") == 0)
-            requestTransaction(args, &translist, &walletlist, &sendHT, &recvHT, 0);
 
         // a series of transactions seperated by semi-colon(;) were requested 
-        else if(strcmp(command, "requestTransactions") == 0){
+        if(strcmp(command, "requestTransactions") == 0){
             // get first argument
-            sscanf(args, "%s", file);
+            fscanf(stdin, "%s", file);
+            disp = 1;
 
             // if it is a valid file path store it's content into 'args' else args was given from stdin
-            if((transFile = fopen(file, "r")) != NULL){
-                fprintf(stdout, "gettin transactions from %s ...\n", file);
-                fgets(args, LINE, transFile);
+            if((transFile = fopen(file, "r")) != NULL)
+                fprintf(stdout, "bitcoin: Getting transactions from %s ...\n", file);
+            // else transactions seperated by semi-colon(;) were requested, the senderID of the 1st one has already been read
+            else{
+                // read the rest of the 1st transaction and append it to the name, then try to carry it out
+                fscanf(stdin, "%512[^;]s", args);
+                getchar();
+                bcopy(args, args + strlen(file), strlen(args) + 1);     // move args string strlen(file_name) bytes further
+                bcopy(file, args, strlen(file));                        // add file_name as prefix to args
+                printf("strlen(file): %d\nargs: %s\n", (int)strlen(file), args);
+                requestTransaction(args, &translist, &walletlist, &sendHT, &recvHT, 0, 0);
+                transFile = stdin;
+                disp = 0;
+            }
+            // get each transaction seperated by semi-colon(;)
+            while(!feof(transFile)){
+                for(i = 0; ((ch = fgetc(transFile)) != EOF) && (ch != ';') && (ch != '\n'); i++)
+                    args[i] = ch;
+                args[i] = '\0';
+                requestTransaction(args, &translist, &walletlist, &sendHT, &recvHT, 0, disp);
+                if(ch == EOF || ch == '\n')
+                    break;
+            }
+            if(stdin != transFile)
                 fclose(transFile);
-            }
+        }
+        else{
+            // get the arguments from cmd(if any)
+            fgets(args, LINE, stdin);
 
-            // for each transaction seperated by semi-colon(delim), attempt to carry it out
-            for(i = 0; i < strlen(args); i += strlen(file) + 1){
-                if(sscanf(args + i, "%512[^;]s", file) == 1)
-                    requestTransaction(file, &translist, &walletlist, &sendHT, &recvHT, 0);
-            }
-        }
-        // estimate the amount of money a user got from bit coin parts within a time range
-        else if(strcmp(command, "findEarnings") == 0)
-            find(args, &recvHT, 0);
+            // a single transaction was requested
+            if(strcmp(command, "requestTransaction") == 0)
+                requestTransaction(args, &translist, &walletlist, &sendHT, &recvHT, 0, 1);
 
-        // estimate the amount of money a user spent by passing a 'piece' of his bit coins to another user
-        else if(strcmp(command, "findPayments") == 0)
-            find(args, &sendHT, 1);
+            // estimate the amount of money a user got from bit coin parts within a time range
+            else if(strcmp(command, "findEarnings") == 0)
+                find(args, &recvHT, 0);
 
-        // print the amount of money a user has right now, given his userID
-        else if(strcmp(command, "walletStatus") == 0){
-            if(sscanf(args, "%s", userID) == 1){
-                if((wallet = (struct Wallet*)listSearch(&walletlist, userID)) == NULL)
-                    fprintf(stdout, "walletStatus: no wallet found for user '%s'\n", userID);
-                else
-                    fprintf(stdout, "user's %s status is %d$\n", wallet->userID, wallet->balance);
+            // estimate the amount of money a user spent by passing a 'piece' of his bit coins to another user
+            else if(strcmp(command, "findPayments") == 0)
+                find(args, &sendHT, 1);
+
+            // print the amount of money a user has right now, given his userID
+            else if(strcmp(command, "walletStatus") == 0){
+                if(sscanf(args, "%s", userID) == 1){
+                    if((wallet = (struct Wallet*)listSearch(&walletlist, userID)) == NULL)
+                        fprintf(stdout, "walletStatus: no wallet found for user '%s'\n", userID);
+                    else
+                        fprintf(stdout, "user's %s status is %d$\n", wallet->userID, wallet->balance);
+                }
             }
-        }
-        // given a coin_id return it's initial value, the number of times it was partitioned and it's unspent part in $
-        else if(strcmp(command, "bitCoinStatus") == 0){
-            // get the coinID from cmd
-            sscanf(args, "%hd", &coinID);
-            if((coinPtr = (struct Coin*)listSearch(&coinlist, &coinID)) == NULL){
-                fprintf(stdout, "There is no bitcoin with code %hd\n", coinID);
-                continue;
+            // given a coin_id return it's initial value, the number of times it was partitioned and it's unspent part in $
+            else if(strcmp(command, "bitCoinStatus") == 0){
+                // get the coinID from cmd
+                sscanf(args, "%hd", &coinID);
+                if((coinPtr = (struct Coin*)listSearch(&coinlist, &coinID)) == NULL){
+                    fprintf(stdout, "There is no bitcoin with code %hd\n", coinID);
+                    continue;
+                }
+                coinStatus(coinPtr);
             }
-            coinStatus(coinPtr);
+            // print all information about each and every transaction a coin was involved in
+            else if(strcmp(command, "traceCoin") == 0){
+                sscanf(args, "%hd", &coinID);
+                if((coinPtr = (struct Coin*)listSearch(&coinlist, &coinID)) == NULL){
+                    fprintf(stdout, "There is no bitcoin with code %hd\n", coinID);
+                    continue;
+                }    
+                coinPrint(coinPtr);   
+            }
+            else if(strcmp(command, "exit") == 0)
+                break;
+            else if(strcmp(command, "help") == 0)
+                help();
+            else
+                fprintf(stderr, "%s: Command not found\nType 'help' to get a list of valid commands\n", command);
         }
-        // print all information about each and every transaction a coin was involved in
-        else if(strcmp(command, "traceCoin") == 0){
-            sscanf(args, "%hd", &coinID);
-            if((coinPtr = (struct Coin*)listSearch(&coinlist, &coinID)) == NULL){
-                fprintf(stdout, "There is no bitcoin with code %hd\n", coinID);
-                continue;
-            }    
-            coinPrint(coinPtr);   
-        }
-        else if(strcmp(command, "exit") == 0)
-            break;
-        else if(strcmp(command, "help") == 0)
-            help();
-        else
-            fprintf(stderr, "%s: Command not found\nType 'help' to get a list of valid commands\n", command);
-        strcpy(args, "\0");
+        args[0] = "\0";
 
     }
 

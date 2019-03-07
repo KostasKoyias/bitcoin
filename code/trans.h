@@ -25,5 +25,5 @@ int transAssign(void*, const void*);
 int transPrint(void*);
 void transFree(void*);
 struct HashTable;
-int requestTransaction(const char*, struct G_list*, struct G_list*, struct HashTable*, struct HashTable*, uint8_t);
+int requestTransaction(const char*, struct G_list*, struct G_list*, struct HashTable*, struct HashTable*, uint8_t, uint8_t);
 #endif
