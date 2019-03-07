@@ -56,7 +56,7 @@ int transPrint(void *trans_void){
 
 /* read transfer data from a file, if the transfer is feasible, make the transfer and update all data structure, return 0
    if syntax is wrong return -2, if the transaction is not feasible or the last transfer recorded is more recent return -1*/
-int requestTransaction(const char* stream, struct G_list* translist, struct G_list* walletlist, struct HashTable* sendHT, struct HashTable* recvHT, uint8_t init){
+int requestTransaction(const char* stream, struct G_list* translist, struct G_list* walletlist, struct HashTable* sendHT, struct HashTable* recvHT, uint8_t init, uint8_t disp){
     static time_t last_transfer = 0;
     static char max_id[MAX_ID] = "0";
     char str_value[AMOUNT];
@@ -189,7 +189,7 @@ int requestTransaction(const char* stream, struct G_list* translist, struct G_li
     fprintf(stdout,"requestTransaction(s): completed\n");
     transPrint(&trans);
     fprintf(stdout, "\033[0m");   //reset text color
-    if(init == 0){
+    if(init == 0 && disp == 1){
         fprintf(stdout, "\t\t\t\bshow current state?(y/n): ");
         while(((ch = getchar()) != 'y') && (ch != 'n'))
             fprintf(stdout, "(y/n): \n");
