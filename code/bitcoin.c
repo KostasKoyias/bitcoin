@@ -12,13 +12,14 @@
 #include "list.h"
 #include "utils.h"
 #include "trans.h"
+#include <strings.h>
 
 int main(int argc, char *argv[]){
     /* declare variables */
     uint16_t bucketSize = 0, bitCoinValue = 0, coinID;
     uint8_t sendBuckets = 0, recvBuckets = 0, i, bucketCapacity, disp;
     FILE *transFile = NULL, *balancesFile = NULL;
-    char userID[MAX_ID], command[MAX_COMMAND], args[LINE], file[MAX_ID], buffer[LINE], ch;
+    char userID[MAX_ID], command[MAX_COMMAND], args[LINE], file[MAX_ID], ch;
     struct HashTable sendHT, recvHT;
     struct Wallet *wallet;
     struct Coin *coinPtr;
@@ -137,9 +138,11 @@ int main(int argc, char *argv[]){
             // else transactions seperated by semi-colon(;) were requested, the senderID of the 1st one has already been read
             else{
                 // read the rest of the 1st transaction and append it to the name, then try to carry it out
-                fscanf(stdin, "%512[^;]s", buffer);
+                fscanf(stdin, "%512[^;]s", args);
                 getchar();
-                sprintf(args,"%s%s", file, buffer);
+                bcopy(args, args + strlen(file), strlen(args) + 1);     // move args string strlen(file_name) bytes further
+                bcopy(file, args, strlen(file));                        // add file_name as prefix to args
+                printf("strlen(file): %d\nargs: %s\n", (int)strlen(file), args);
                 requestTransaction(args, &translist, &walletlist, &sendHT, &recvHT, 0, 0);
                 transFile = stdin;
                 disp = 0;
@@ -207,7 +210,7 @@ int main(int argc, char *argv[]){
             else
                 fprintf(stderr, "%s: Command not found\nType 'help' to get a list of valid commands\n", command);
         }
-        strcpy(args, "\0");
+        args[0] = "\0";
 
     }
 
