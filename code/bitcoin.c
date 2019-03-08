@@ -210,8 +210,7 @@ int main(int argc, char *argv[]){
             else
                 fprintf(stderr, "%s: Command not found\nType 'help' to get a list of valid commands\n", command);
         }
-        args[0] = "\0";
-
+        args[0] = '\0';
     }
 
 free:    
