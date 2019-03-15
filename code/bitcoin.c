@@ -103,6 +103,7 @@ int main(int argc, char *argv[]){
     while(fgets(args, LINE, transFile) != NULL){
         // add transaction to the transactions list and then add a pointer to it, in the wallet and the corresponding tree of the coinlist
         if(requestTransaction(args, &translist, &walletlist, &sendHT, &recvHT, 1, 0) == -2){
+            //continue; // uncomment not to abort, but just reject transaction
             fprintf(stdout, "bitcoin: abort...\n");
             fclose(transFile);
             goto free;

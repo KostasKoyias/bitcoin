@@ -95,10 +95,6 @@ int requestTransaction(const char* stream, struct G_list* translist, struct G_li
         
     }
 
-    // no self-transactions allowed
-    if(strcmp(trans.senderID, trans.receiverID) == 0)
-        return -3;
-
     // if date and time is not given use current date and time
     if(argc == 3 + init){ 
         time(&trans_time); // get current time as transfer time
@@ -116,6 +112,10 @@ int requestTransaction(const char* stream, struct G_list* translist, struct G_li
         fprintf(stdout, "\033[0m");   //reset text color        
         return -4;
     }
+
+    // no self-transactions allowed
+    if(strcmp(trans.senderID, trans.receiverID) == 0)
+        return -3;
 
     // store the time of latest transfer in order to reject any "new" transfers with older dates after initialization
     if(init == 1)
