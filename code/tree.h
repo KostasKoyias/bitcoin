@@ -19,7 +19,7 @@ struct Node{
 // node/tree manipulation
 int freeTree(struct Node*);
 struct Node* searchTree(struct Node*, const char*);
-int splitNode(struct Node* node, struct Transaction**);
+int splitNode(struct Node* node, struct Transaction**, int);
 int printTree(const struct Node*);
 int nodeTrans(const struct Node*);
 

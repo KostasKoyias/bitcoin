@@ -23,7 +23,7 @@ struct Node* searchTree(struct Node* root, const char* userID){
 }
 
 /* split(not always) a node into two(sometimes just one) other(s), return the number of nodes generated*/
-int splitNode(struct Node* node, struct Transaction** transactionPtr){
+int splitNode(struct Node* node, struct Transaction** transactionPtr, int rem){
     struct Transaction* transaction = *transactionPtr;
 
     if(node == NULL || transaction == NULL)
@@ -40,12 +40,12 @@ int splitNode(struct Node* node, struct Transaction** transactionPtr){
     node->left->trans = NULL, node->left->right = node->left->left = NULL;
 
     // check whether this was a 'perfect' transfer or is there a remainder, if so create a node for the sender because he still owns a part
-    if(node->value > transaction->value){
+    if(node->value > rem){
         if((node->right = malloc(sizeof(struct Node))) == NULL){
             perror("malloc");
             return -1;
         }
-        strcpy(node->right->userID, transaction->senderID); node->right->value = node->value - transaction->value;
+        strcpy(node->right->userID, transaction->senderID); node->right->value = node->value - rem;
         node->right->trans = NULL, node->right->right = node->right->left = NULL;
         return 2;
     }

@@ -168,7 +168,7 @@ int requestTransaction(const char* stream, struct G_list* translist, struct G_li
         recv->balance += temp - rem;
 
         // split(or link) node, add a pointer to the transaction that got the node to split, splitNode returns the number of nodes generated(0,1 or 2)
-        temp = splitNode(node, &transPtr);
+        temp = splitNode(node, &transPtr, temp);
 
         // delete this coin part(leaf node) from the leaf_node pointer list of the sender 
         if(parser->next != NULL)
