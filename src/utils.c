@@ -1,4 +1,4 @@
-#include "utils.h"
+#include "include/utils.h"
 
 // get time_t value of a date supporting a DD-MM-YYYY HH-MM format
 int date_to_secs(char* the_date, char* the_hour_min, time_t *ret_val){
@@ -23,7 +23,7 @@ int date_to_secs(char* the_date, char* the_hour_min, time_t *ret_val){
 void usage_error(){
     fprintf(stdout, "Usage: bitcoin -a bitCoinBalancesFile -t transactionFile -v bitCoinValue "\
     "-h1 senderHT_Buckets -h2 recvHT_Buckets -b bucketSize\nArguments 1 and 2 should be valid paths"\
-    "and arguments 3-6 should be positive integers.\nAll six arguments are mandatory\n");
+    " and arguments 3-6 should be positive integers.\nAll six arguments are mandatory\n");
     exit(EXIT_FAILURE);
 }
 

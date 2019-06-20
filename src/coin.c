@@ -1,4 +1,4 @@
-#include "coin.h"
+#include "include/coin.h"
 
 /************************************************************\
  The following are 'member methods' of a linked list of coins

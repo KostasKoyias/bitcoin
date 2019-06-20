@@ -1,16 +1,11 @@
-#ifndef list_H_
-#define list_H_
-#include <stdio.h>
 /**********************************************************************************************\
 ** a generic doubly linked list implementation, appropriate for any data type of your choice, **
 ** all you need to do is define it's member methods based on your data type's characteristics **
 ** Author: Kostas Koyias  https://github.com/KostasKoyias                                     **
 \**********************************************************************************************/                             
-
-
-#include <string.h>
-#include <stdlib.h>
-#include <stdint.h>
+#ifndef list_H_
+#define list_H_
+#include "define.h"
 
 struct G_node{
     void *data;
@@ -36,9 +31,7 @@ struct G_list{
 void* listSearch(const struct G_list*, const void* data);
 int listInsert(struct G_list*, const void*);
 int listPrint(const struct G_list*);
-int listDelete(struct G_list*, const void*);
 int listFree(struct G_list*);
-double listSum(const struct G_list*);
 int listMap(struct G_list*, int (*)(void *));
 
 #endif

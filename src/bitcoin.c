@@ -4,14 +4,14 @@
  Author: Kostas Koyias https://github.com/KostasKoyias
 \***************************************************************************************************************************************/
 
-#include "define.h"
-#include "hashTable.h"
-#include "wallet.h"
-#include "tree.h"
-#include "coin.h"
-#include "list.h"
-#include "utils.h"
-#include "trans.h"
+#include "include/define.h"
+#include "include/hashTable.h"
+#include "include/wallet.h"
+#include "include/tree.h"
+#include "include/coin.h"
+#include "include/list.h"
+#include "include/utils.h"
+#include "include/trans.h"
 #include <strings.h>
 
 int main(int argc, char *argv[]){

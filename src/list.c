@@ -1,4 +1,4 @@
-#include "list.h"
+#include "include/list.h"
 
 /*  check whether an instance of a certain type belongs to a list, comparing it with the list's elements using a type-specific comparison function
     returns a pointer to the item's position if it exists or NULL if it does not*/
@@ -39,33 +39,6 @@ int listInsert(struct G_list* list, const void *data){
     return list->assign(node->data, data);
 }
 
-/* delete an element of the list, returns 0 in success and -1 if the element given is not a list's member*/
-int listDelete(struct G_list* list, const void *data){
-    struct G_node *node;
-    if(list == NULL || list->head == NULL || data == NULL || list->comp == NULL)
-        return -1;
-    if(list->comp(list->head->data, data) == 0){
-        node = list->head;
-        list->head = node->next;
-    }
-    else{
-        if((node = listSearch(list, data)) == NULL)
-            return -1;
-        if(node->next != NULL)
-            node->next->prev = node->prev;
-        if(node->prev != NULL)
-            node->prev->next = node->next;
-    }
-    list->length--;
-    if(list->free_data == NULL)
-        free(node->data);
-    else
-        list->free_data(node->data);
-    if(node != NULL)
-        free(node);
-    return 0;
-}
-
 /* print all nodes of a list */
 int listPrint(const struct G_list *list){
     struct G_node* parser;
@@ -92,21 +65,6 @@ int listFree(struct G_list* list){
         free(parser);
     }
     return 0;
-}
-
-/* add up all elements in a list and return the sum */
-double listSum(const struct G_list* list){
-    struct G_node *parser;
-    double sum = 0;
-
-    // check whether there is a definition about the value of this kind of data
-    if(list->value == NULL)
-        return sum;
-
-    // for each element add up it's value in the list
-    for(parser = list->head; parser != NULL; parser = parser->next)
-        sum += list->value(parser->data);
-    return sum;
 }
 
 // apply a function to each element of a list

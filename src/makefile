@@ -1,6 +1,5 @@
 CC = gcc
 CFLAGS = -g -Wall 
-HDRS = hashTable.h wallet.h tree.h coin.h list.h utils.h
 OBJS = wallet.o tree.o hashTable.o list.o coin.o trans.o utils.o 
 SOURCES = bitcoin.c wallet.c tree.c hashTable.c coin.c list.c trans.c utils.c
 
