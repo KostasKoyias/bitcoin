@@ -76,7 +76,7 @@ int coinTimesPassed(const struct Coin* coin){
 int coinStatus(const struct Coin* coin){
     if(coin == NULL)
         return -1;
-    fprintf(stdout, "status of coin %hd\n-------------------\nInitial_Value: %d$\nUnspent_Part: %d$\nInvolved in %d transactions\n",\
+    fprintf(stdout, "\e[1;4mstatus of coin %hd\e[0m\nInitial_Value: %d$\nUnspent_Part: %d$\nInvolved in %d transactions\n",\
     coin->coinID, coin->root.value, coinUnspent(coin), coinTimesPassed(coin));
     return 0;
 }

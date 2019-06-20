@@ -54,7 +54,7 @@ int blockPrint(void* blockPtr){
     struct Block* block = (struct Block*)blockPtr;
 
     // print header with blue color
-    fprintf(stdout, "\033[1;34mBlock\n-----\n\033[0mRecords: %d", block->empty);  
+    fprintf(stdout, "\e[1;34;4mBlock\n\e[0mRecords: %d\n", block->empty);  
     for(i = 0; i < block->empty; i++)
         walletPrint(block->wallets[i]);
     return 0;
@@ -125,17 +125,17 @@ int htInsert(struct HashTable* table, struct Wallet** walletPtr){
 void htPrint(const struct HashTable* table){
     uint8_t i;
 
-    fprintf(stdout, "\033[1;33m");   //Set the text to the color yellow
+    fprintf(stdout, "\e[1;33m");   //Set the text to the color yellow
     for(i = 0; i < strlen(table->name) + 13; i++)
         putchar('-');
     fprintf(stdout, "\n|HashTable: %s|\n", table->name);
     for(i = 0; i < strlen(table->name) + 13; i++)
         putchar('-');
     putchar('\n');
-    fprintf(stdout, "\033[0m"); //Resets the text to default color
+    fprintf(stdout, "\e[0m"); //Reset the text to default color
     fprintf(stdout, "Buckets: %d\nBlock Capacity: %d\n", table->buckets, table->capacity);
     for(i = 0; i < table->buckets; i++){
-        fprintf(stdout, "\033[1;31m _________\n|Bucket: %d|\n|_________|\n\033[0m", i);
+        fprintf(stdout, "\e[1;31m-----------\n|Bucket: %d|\n-----------\n\e[0m", i);
         listPrint(&(table->blocks[i]));
     }
 }

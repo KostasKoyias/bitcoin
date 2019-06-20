@@ -82,7 +82,7 @@ int syntax(uint8_t code){
             fprintf(stdout, "printHT\n");
             break;
         default:
-            return error_return(-1, "syntax: Error, command with code %hhd does not exist, type 'help' to get a command list\n", code);
+            return error_return(-1, "syntax: \e[1;31mError\e[0m, command with code %hhd does not exist, type 'help' to get a command list\n", code);
     }
     return 0;
 }
@@ -129,12 +129,12 @@ int find(const char *stream, struct HashTable* table, uint8_t code){
         start = 0;
         end = time(NULL);
         if(code != 0 && code != 1)
-            return error_return(-1, "find: Error, invalid code %hhd", code);
+            return error_return(-1, "find: \e[1;31mError\e[0m, invalid code %hhd", code);
     }
     // if dates and times were passed convert them to time_t in order to simplify time comparisons 
     else if(argc == 5){
         if(date_to_secs(start_date, start_time, &start) == -1 || date_to_secs(end_date, end_time, &end) == -1)
-            return error_return(-1, "find: Error, invalid date format; the appropriate is DD-MM-YY MM:HH\n");
+            return error_return(-1, "find: \e[1;31mError\e[0m, invalid date format; the appropriate is DD-MM-YY MM:HH\n");
 
         // set code to indicate that date and time was specified(code = 2 or 3) and it either a sender(code = 2) or a receiver(code = 3) type query
         if(code == 0)
@@ -142,11 +142,11 @@ int find(const char *stream, struct HashTable* table, uint8_t code){
         else if(code == 1)
             code = 3;
         else
-            return error_return(-2, "find: Error, invalid code %hhd", code);
+            return error_return(-2, "find: \e[1;31mError\e[0m, invalid code %hhd", code);
     }
     // else the command's format was invalid
     else{
-        fprintf(stdout, "find(Earnings/Payments): Error, invalid syntax\nTry this:\t");
+        fprintf(stdout, "find(Earnings/Payments): \e[1;31mError\e[0m, invalid syntax\nTry this:\t");
         syntax(2 + code);
         return -1;
     }

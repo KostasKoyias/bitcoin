@@ -87,7 +87,7 @@ int requestTransaction(const char* stream, struct G_list* translist, struct G_li
 
         // check whether the transID given already exists
         if((transPtr = (struct Transaction*)listSearch(translist, trans.transID)) != NULL)
-            return error_return(-2, "requestTransaction(s): Error, there is already a transaction with id equal to %s\n\n", trans.transID);
+            return error_return(-2, "requestTransaction(s): \e[1;31mError\e[0m, there is already a transaction with id equal to %s\n\n", trans.transID);
         
         // update max until now trans_id, in order to be able to generate unique id's after the initialization by adding 1 to the last id used
         if((temp = atoi(trans.transID)) != 0)
@@ -106,7 +106,7 @@ int requestTransaction(const char* stream, struct G_list* translist, struct G_li
         date_to_secs(trans.date, trans.time, &trans_time); // convert date and time given to seconds since 1970
     // if syntax is incorrect, return -2
     else{
-        fprintf(stdout, "requestTransaction(s): invalid syntax: \"%s\" \n\n", stream);
+        fprintf(stdout, "requestTransaction(s): \e[1;31mError\e[0m, invalid syntax: \"%s\" \n\n", stream);
         syntax(0);
         syntax(1);
         fprintf(stdout, "\033[0m");   //reset text color        
@@ -122,27 +122,27 @@ int requestTransaction(const char* stream, struct G_list* translist, struct G_li
         last_transfer = MAX(last_transfer, trans_time);
     // if last transfer was more recent, this transfer is cancelled
     else if(last_transfer > trans_time)
-        return error_return(-5, "requestTransaction(s): Error, %s was rejected because the most recent transfer was at %s\n", trans.transID, ctime(&last_transfer));
+        return error_return(-5, "requestTransaction(s): \e[1;31mError\e[0m, %s was rejected because the most recent transfer was at %s\n", trans.transID, ctime(&last_transfer));
     trans.value = atoi(str_value);
 
     // if sender is not yet 'hashed' in the senders hash table
     if((send = htSearch(sendHT, trans.senderID)) == NULL){
         // then look at wallet's list, if he is not there, return -6 because he does not have a wallet
         if((send = (struct Wallet*)listSearch(walletlist, trans.senderID)) == NULL)
-            return error_return(-6, "requestTransaction(s) Error, sender %s does not have a wallet\n\n", trans.senderID);
+            return error_return(-6, "requestTransaction(s): \e[1;31mError\e[0m, sender %s does not have a wallet\n\n", trans.senderID);
         // else add a pointer to his wallet into the senders hash table
         htInsert(sendHT, &send);
     }
     // do the same thing for the receiver
     if((recv = htSearch(recvHT, trans.receiverID)) == NULL){
         if((recv = (struct Wallet*)listSearch(walletlist, trans.receiverID))== NULL)
-            return error_return(-6, "requestTransaction(s): Error, receiver %s does not have a wallet\n\n", trans.receiverID);
+            return error_return(-6, "requestTransaction(s): \e[1;31mError\e[0m, receiver %s does not have a wallet\n\n", trans.receiverID);
         htInsert(recvHT, &recv);
     }
 
     // check whether the transfer is feasible
     if(send->balance < trans.value)
-        return error_return(-7, "requestTransaction(s): Error, transaction %s not feasible for sender %s, balance is %d but %d is requested\n\n",\
+        return error_return(-7, "requestTransaction(s): \e[1;31mError\e[0m, transaction %s not feasible for sender %s, balance is %d but %d is requested\n\n",\
         trans.transID, trans.senderID, send->balance, trans.value);
  
     // update the 'global' transaction list and get a pointer to the new transaction
@@ -186,7 +186,7 @@ int requestTransaction(const char* stream, struct G_list* translist, struct G_li
         listInsert(&(recv->quota_list), &(node->left));
     }
 
-    fprintf(stdout,"requestTransaction(s): completed\n");
+    fprintf(stdout,"requestTransaction(s): \e[1;32mcompleted\e[0m\n");
     transPrint(&trans);
     fprintf(stdout, "\033[0m");   //reset text color
     if(init == 0 && disp == 1){

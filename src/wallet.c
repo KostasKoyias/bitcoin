@@ -46,13 +46,11 @@ int walletPrint(void *wallet_void){
     struct Wallet* wallet = (struct Wallet*)wallet_void;
     if(wallet == NULL || wallet->userID == NULL)
         return -1;
-    fprintf(stdout, "\nWallet\n------\nUserID: ");
-    fprintf(stdout, "\033[1;32m");   //Set the text to the color green
-    fprintf(stdout,"%s\n", wallet->userID);// print userID in green
-    fprintf(stdout, "\033[0m");   //reset color
-    fprintf(stdout, "Balance: %d\nSender_List\n***********\n", wallet->balance);
+    fprintf(stdout, "\n\e[1;4;95mWallet\e[0m\nUserID: ");
+    fprintf(stdout,"\e[1;32m%s\e[0m\n", wallet->userID);// print userID in green
+    fprintf(stdout, "Balance: %d\n\e[1;4mSender List\e[0m\n", wallet->balance);
     listPrint(&(wallet->send_list));
-    fprintf(stdout, "Receiver_List\n*************\n");
+    fprintf(stdout, "\e[1;4mReceiver List\e[0m\n");
     listPrint(&(wallet->recv_list));
     return 0;
 }

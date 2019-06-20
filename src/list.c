@@ -44,7 +44,6 @@ int listPrint(const struct G_list *list){
     struct G_node* parser;
     if(list == NULL || list->head == NULL || list->print == NULL)
         return -1;
-    fprintf(stdout, "\nlist of length %d and node size %d\n-------------------------------------\n", list->length, (int)list->type_size);
     for(parser = list->head; parser != NULL; parser = parser->next)
         list->print(parser->data);
     return 0;

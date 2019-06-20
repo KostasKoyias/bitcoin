@@ -69,7 +69,7 @@ int main(int argc, char *argv[]){
     while(fscanf(balancesFile, "%s", userID) > 0){
         // create a wallet for the new user
         if(listSearch(&walletlist, userID) != NULL){
-            fprintf(stdout, "bitcoin: Error, userID %s already exists, abort now...\n", userID);
+            fprintf(stdout, "bitcoin: \e[1;31mError\e[0m, userID %s already exists, abort now...\n", userID);
             fclose(balancesFile); fclose(transFile);
             goto free;
         }
@@ -109,16 +109,9 @@ int main(int argc, char *argv[]){
             goto free;
         }
     }
-    fprintf(stdout, "\t Done.\n");
+    fprintf(stdout, "\nDone.\n");
     if(transFile != NULL) 
         fclose(transFile);
-
-    // print current state of wallets and hash tables
-    fprintf(stdout, "After reading the input files, we have the following wallets and content for each of them\n");
-    listPrint(&walletlist);
-
-    fprintf(stdout, "After reading the input files, Hash Tables look like this\n");
-    htPrint(&sendHT); htPrint(&recvHT);
 
     // prompt user to enter a query until user types 'exit'
     while(1){
@@ -143,7 +136,6 @@ int main(int argc, char *argv[]){
                 getchar();
                 bcopy(args, args + strlen(file), strlen(args) + 1);     // move args string strlen(file_name) bytes further
                 bcopy(file, args, strlen(file));                        // add file_name as prefix to args
-                printf("strlen(file): %d\nargs: %s\n", (int)strlen(file), args);
                 requestTransaction(args, &translist, &walletlist, &sendHT, &recvHT, 0, 0);
                 transFile = stdin;
                 disp = 0;
