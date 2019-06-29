@@ -10,7 +10,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <time.h>
-#include "list.h"
+#include "../gen-list/list.h"
 #define MAX(a,b) ((a) > (b)) ? (a) : (b)
 #define MIN(a,b) ((a) < (b)) ? (a) : (b)
 #define COMMANDS 7

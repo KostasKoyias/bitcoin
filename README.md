@@ -75,6 +75,24 @@ the size of the type it’s going to ‘host’ plus a bunch of pointers to func
 list node of a certain type can be manipulated(initialized, freed etc.). By implementing those
 member methods for any data type of our choice we can create a list of this particular kind.
 
+## Run it
+
+In order to run this application, one needs to first
+clone this repository and initialize all sub-modules
+by running:
+
+    ~ $ git clone --recurse-submodules https://github.com/KostasKoyias/bitcoin 
+
+or :
+
+    ~ $ git clone https://github.com/KostasKoyias/bitcoin
+    ~ $ cd bitcoin/src
+    ~/bitcoin/src $ make submodule
+
+and finally generate the executable:
+
+    ~/bitcoin/src $ make
+
 ## Conclusion
 
 Last but not least, notice that all data of this system is stored only once without repeating

@@ -96,9 +96,9 @@ void help(){
 }
 
 // given a list of pointers to transactions, add up the value of each transaction that was made during a certain time range
-int get_money(struct G_list* transPtrList, time_t start, time_t end){
+int get_money(list_t* transPtrList, time_t start, time_t end){
     struct Transaction *trPtr;
-    struct G_node *parser;
+    node_t *parser;
     time_t trans_time;
     int money = 0;
     if(transPtrList == NULL)

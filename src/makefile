@@ -1,7 +1,8 @@
 CC = gcc
+SUBMODULE = ./gen-list
 CFLAGS = -g -Wall 
 OBJS = wallet.o tree.o hashTable.o list.o coin.o trans.o utils.o 
-SOURCES = bitcoin.c wallet.c tree.c hashTable.c coin.c list.c trans.c utils.c
+SOURCES = bitcoin.c wallet.c tree.c hashTable.c coin.c gen-list/list.c trans.c utils.c
 
 all: bitcoin $(OBJS)  
 
@@ -25,11 +26,15 @@ utils.o: utils.c
 trans.o: trans.c
 	$(CC) $(CFLAGS) -c trans.c
 
-list.o: list.c
-	$(CC) $(CFLAGS) -c list.c
+list.o: gen-list/list.c
+	$(CC) $(CFLAGS) -c gen-list/list.c
 
 tree.o: tree.c
 	$(CC) $(CFLAGS) -c tree.c
+
+submodule:
+	git submodule init $(SUBMODULE)
+	git submodule update $(SUBMODULE)
 
 clean: 
 	rm -f $(OBJS) 

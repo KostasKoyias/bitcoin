@@ -22,11 +22,11 @@ int walletAssign(void *wallet, const void* userID){
         return -1;
 
     // initialize transactions list
-    wall->send_list = wall->recv_list = (struct G_list){.head = NULL, .type_size = sizeof(struct Transaction*), .length = 0,\
+    wall->send_list = wall->recv_list = (list_t){.head = NULL, .type_size = sizeof(struct Transaction*), .length = 0,\
     .comp = NULL, .assign = transPtrAssign, .print = transPtrPrint, .free_data = NULL, .value = NULL};
 
     // initialize the tree_node_pointers list
-    wall->quota_list = (struct G_list){.head = NULL, .type_size = sizeof(struct Node*), .length = 0, .comp = NULL,\
+    wall->quota_list = (list_t){.head = NULL, .type_size = sizeof(struct Node*), .length = 0, .comp = NULL,\
     .assign = nodePtrAssign, .print = NULL, .free_data = NULL, .value = NULL};
 
     return 0;

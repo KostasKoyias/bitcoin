@@ -68,7 +68,7 @@ int htInit(struct HashTable* table, char *name, const uint8_t buckets, const int
     table->hashFunction = hashFunction;
 
     // get 'bucksNumber' buckets for the Hash Table
-    if((table->blocks = malloc(sizeof(struct G_list) * buckets)) == NULL){
+    if((table->blocks = malloc(sizeof(list_t) * buckets)) == NULL){
         perror("htInit - malloc");
         return -1;
     }
@@ -77,7 +77,7 @@ int htInit(struct HashTable* table, char *name, const uint8_t buckets, const int
     // for each bucket
     for(i = 0; i < buckets; i++)
         // initialize the bucket's block list
-        table->blocks[i] = (struct G_list){NULL, sizeof(struct Block), 0, blockComp, blockAssign, blockPrint, blockFree, NULL};
+        table->blocks[i] = (list_t){NULL, sizeof(struct Block), 0, blockComp, blockAssign, blockPrint, blockFree, NULL};
     table->capacity = blockCapacity;
     return 0;
 }
@@ -102,7 +102,7 @@ int htFree(struct HashTable* table){
 int htInsert(struct HashTable* table, struct Wallet** walletPtr){
     uint8_t buck;
     struct Block newBlock = {walletPtr, 0, table->capacity};
-    struct G_node *head;
+    node_t *head;
     struct Block *block;
 
     // find the appropriate bucket and insert the record

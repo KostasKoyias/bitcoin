@@ -9,7 +9,7 @@
 #include "include/wallet.h"
 #include "include/tree.h"
 #include "include/coin.h"
-#include "include/list.h"
+#include "gen-list/list.h"
 #include "include/utils.h"
 #include "include/trans.h"
 #include <strings.h>
@@ -24,7 +24,7 @@ int main(int argc, char *argv[]){
     struct Wallet *wallet;
     struct Coin *coinPtr;
     struct Node *nodePtr;
-    struct G_list coinlist = {NULL, sizeof(struct Coin), 0, coinCompare, coinAssign, coinPrint, coinFree, NULL}, 
+    list_t coinlist = {NULL, sizeof(struct Coin), 0, coinCompare, coinAssign, coinPrint, coinFree, NULL}, 
     walletlist = {NULL, sizeof(struct Wallet), 0, walletCompare, walletAssign, walletPrint, walletFree, NULL},
     translist = {NULL, sizeof(struct Transaction), 0, transCompare, transAssign, transPrint, NULL, NULL};
 

@@ -56,13 +56,13 @@ int transPrint(void *trans_void){
 
 /* read transfer data from a file, if the transfer is feasible, make the transfer and update all data structure, return 0
    if syntax is wrong return -2, if the transaction is not feasible or the last transfer recorded is more recent return -1*/
-int requestTransaction(const char* stream, struct G_list* translist, struct G_list* walletlist, struct HashTable* sendHT, struct HashTable* recvHT, uint8_t init, uint8_t disp){
+int requestTransaction(const char* stream, list_t* translist, list_t* walletlist, struct HashTable* sendHT, struct HashTable* recvHT, uint8_t init, uint8_t disp){
     static time_t last_transfer = 0;
     static char max_id[MAX_ID] = "0";
     char str_value[AMOUNT];
     struct Transaction trans, *transPtr;
     struct Wallet *send, *recv;
-    struct G_node *parser, *parser_next;
+    node_t *parser, *parser_next;
     struct Node *node;
     struct tm *now;
     int rem, temp;
