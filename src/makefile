@@ -1,14 +1,15 @@
 CC = gcc
 SUBMODULE = ./gen-list
-CFLAGS = -g -Wall 
+CFLAGS = -g -Wall -Iinclude
+OUT = bitcoin
 OBJS = wallet.o tree.o hashTable.o list.o coin.o trans.o utils.o 
-SOURCES = bitcoin.c wallet.c tree.c hashTable.c coin.c gen-list/list.c trans.c utils.c
+SOURCES = $(OUT).c wallet.c tree.c hashTable.c coin.c gen-list/list.c trans.c utils.c
 
-all: bitcoin $(OBJS)  
+all: $(OUT) $(OBJS)  
 
 # main programm
-bitcoin: bitcoin.c $(OBJS)
-	$(CC) $(CFLAGS) -o bitcoin $(SOURCES)
+$(OUT): $(OUT).c $(OBJS)
+	$(CC) $(CFLAGS) -o $(OUT) $(SOURCES)
 
 # data structures and utilities	
 coin.o: coin.c
@@ -37,4 +38,4 @@ submodule:
 	git submodule update $(SUBMODULE)
 
 clean: 
-	rm -f $(OBJS) 
+	rm -f $(OBJS) $(OUT)

@@ -1,4 +1,4 @@
-#include "include/hashTable.h"
+#include "hashTable.h"
 
 /*  a Universal Hashing Implementation , appropriate for strings*/
 int UniversalHashing(const char* str, const int buckets){

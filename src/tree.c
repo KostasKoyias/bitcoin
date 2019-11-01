@@ -1,4 +1,4 @@
-#include "include/tree.h"
+#include "tree.h"
 
 /*  search for the latest transaction of a bitcoin that involves a given user, if there is no such transaction NULL is returned
     whenever a transaction is made if there is still some money left in the sender's part of the coin, of the two nodes created

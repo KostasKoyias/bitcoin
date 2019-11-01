@@ -1,4 +1,4 @@
-#include "include/utils.h"
+#include "utils.h"
 
 // get time_t value of a date supporting a DD-MM-YYYY HH-MM format
 int date_to_secs(char* the_date, char* the_hour_min, time_t *ret_val){
