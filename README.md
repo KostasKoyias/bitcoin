@@ -69,11 +69,12 @@ of applying this rule to both of his children recursively, until reaching a leaf
 ## The lists thing
 
 As you might have noticed, a variety of lists is used here, so implementing a ​
-**generic doubly linked list** (`struct G_list`)
+**generic doubly linked list** (`list_t`)
 was probably a good idea. This structure contains as fields
 the size of the type it’s going to ‘host’ plus a bunch of pointers to functions, specifying how a
 list node of a certain type can be manipulated(initialized, freed etc.). By implementing those
 member methods for any data type of our choice we can create a list of this particular kind.
+Check the source code out at the URI linked under .gitmodules.
 
 ## Run it
 
